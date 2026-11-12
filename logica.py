@@ -21,14 +21,28 @@ def guardar_trans(transacciones):
         return json.dump(transacciones, file, indent=4, ensure_ascii=False)
 
 
-def agregar_trans(monto, categoria, tipo, descripcion):
+def agregar_trans(monto, tipo, categoria, descripcion):
     transacciones = cargar_trans()
     nueva = {
         "monto": float(monto),
-        "tipo": categoria,
-        "categoria": tipo,
+        "tipo": tipo,
+        "categoria": categoria,
         "descripcion": descripcion,
     }
     transacciones.append(nueva)
     guardar_trans(transacciones)
     return True
+
+
+def balance():
+    transacciones = cargar_trans()
+    total = 0.0
+    
+    for t in transacciones: 
+        
+        if t["tipo"].lower() == "ingreso":
+            total += t["monto"]
+        else:
+            total -= t["monto"]
+            
+    return total
