@@ -37,12 +37,24 @@ def agregar_trans(monto, tipo, categoria, descripcion):
 def balance():
     transacciones = cargar_trans()
     total = 0.0
-    
-    for t in transacciones: 
-        
+
+    for t in transacciones:
+
         if t["tipo"].lower() == "ingreso":
             total += t["monto"]
         else:
             total -= t["monto"]
-            
+
     return total
+
+
+def movimientos():
+    transaciones = cargar_trans()
+    print("----MOVIMIENTOS----")
+    if not transaciones:
+        input("No hay transaciones, presiona 0 para volver.")
+    else:
+        for i, t in enumerate(transaciones, start=1):
+            signo = "+" if t["tipo"].lower() == "ingreso" else "-"
+            print(f"{i}. [{signo}] ${t['monto']:.2f} | Cat: {t['categoria']} | Desc: {t['descripcion']}")
+    

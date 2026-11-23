@@ -1,17 +1,14 @@
-from logica import agregar_trans, cargar_trans, balance
+from logica import agregar_trans, cargar_trans, balance , movimientos
 
 while True:
-    
+
     total_actual = balance()
 
     print("\n--- MENÚ PRINCIPAL ---")
-    print(
-        f"Saldo total actual: {total_actual}"
-    )  
+    print(f"Saldo total actual: {total_actual}")
     print("1. Agregar ingreso")
     print("2. Agregar Gasto:")
-    print("3. Ver ingresos:")
-    print("4. Ver Gastos:")
+    print("3. Ver Movimientos")
     print("5. Salir")
 
     try:
@@ -32,7 +29,14 @@ while True:
         print("----------------------------------------")
         print(f"Monto: {monto} \nCategoria: {categoria} \nDescripcion: {descripcion}")
 
-    elif accion == 4:
-        break
+    elif accion == 3:
+        movimientos()
+
+    elif accion == 5:
+        accion2 = input("Estas Seguro que quieres salir?: [S] [N]: \n").lower()
+        if accion2 == 's':
+            break
+    elif accion2 == "n":
+        continue
     else:
         print("Opcion no valida.")
