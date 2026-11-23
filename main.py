@@ -1,7 +1,7 @@
 from logica import agregar_trans, balance, balance_en_bs, movimientos
 from tasa import tasa_dia
 
-tasas = tasa_dia()  # una sola consulta al abrir el programa
+tasas = tasa_dia()  
 
 
 def preguntar_otro():
@@ -13,6 +13,28 @@ def preguntar_otro():
         if respuesta == "m":
             return False
         print("Escribe A o M.")
+
+
+def ver_movimientos():
+    """Submenú para elegir qué movimientos ver."""
+    while True:
+        print("\n--- VER MOVIMIENTOS ---")
+        print("1. Ingresos y gastos")
+        print("2. Solo ingresos")
+        print("3. Solo gastos")
+        print("4. Volver al menú")
+        opcion = input("Elige una opcion: ")
+
+        if opcion == "1":
+            movimientos("todos")
+        elif opcion == "2":
+            movimientos("ingreso")
+        elif opcion == "3":
+            movimientos("gasto")
+        elif opcion == "4":
+            break
+        else:
+            print("Opcion no valida.")
 
 
 def registrar_transaccion(tipo, tasa_dolar):
@@ -61,8 +83,7 @@ while True:
                 break
 
     elif accion == 3:
-        movimientos()
-        input("\nPresiona Enter para volver al menú.")
+        ver_movimientos()
 
     elif accion == 4:
         tasas = tasa_dia()

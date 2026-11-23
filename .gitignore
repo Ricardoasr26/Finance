@@ -1,8 +1,16 @@
-
+# Datos personales y generados por el programa
 data/
-*.json
 
-
+# Python
 __pycache__/
 *.pyc
+
+# Entornos virtuales
+venv/
+.venv/
+
+# Variables secretas (por si algún día usas una API con clave)
+.env
+
+# Editor
 .vscode/

@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import datetime
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 data_file = os.path.join(BASE_DIR, "data", "transacciones.json")
@@ -31,6 +32,7 @@ def agregar_trans(monto, tipo, categoria, descripcion, tasa_dolar=0.0):
         "categoria": categoria,
         "descripcion": descripcion,
         "tasa_dolar": float(tasa_dolar),
+        "fecha": datetime.now().strftime("%Y-%m-%d %H:%M"),
     }
     transacciones.append(nueva)
     guardar_trans(transacciones)
@@ -53,19 +55,36 @@ def balance_en_bs(tasa_dolar):
     return balance() * tasa_dolar
 
 
-def movimientos():
+def movimientos(filtro="todos", limite=10):
+    """Muestra los movimientos más recientes primero.
+
+    filtro: "todos", "ingreso" o "gasto"
+    limite: máximo de movimientos a mostrar
+    """
     transacciones = cargar_trans()
-    print("----MOVIMIENTOS----")
+
+    if filtro != "todos":
+        transacciones = [t for t in transacciones if t["tipo"].lower() == filtro]
+
+    titulos = {"todos": "TODOS", "ingreso": "INGRESOS", "gasto": "GASTOS"}
+    print(f"----MOVIMIENTOS ({titulos[filtro]})----")
+
     if not transacciones:
-        input("No hay transacciones, presiona Enter para volver.")
+        print("No hay movimientos para mostrar.")
         return
 
-    for i, t in enumerate(transacciones, start=1):
+    
+    recientes = transacciones[::-1][:limite]
+
+    for i, t in enumerate(recientes, start=1):
         signo = "+" if t["tipo"].lower() == "ingreso" else "-"
-        # .get() evita errores con transacciones viejas que no tienen tasa
+        
         tasa = t.get("tasa_dolar", 0.0)
+        fecha = t.get("fecha", "Sin fecha")
         en_bs = f" | Bs {t['monto'] * tasa:,.2f}" if tasa else ""
         print(
-            f"{i}. [{signo}] ${t['monto']:.2f}{en_bs} | "
+            f"{i}. [{signo}] ${t['monto']:.2f}{en_bs} | {fecha} | "
             f"Cat: {t['categoria']} | Desc: {t['descripcion']}"
         )
+
+    print(f"\nMostrando {len(recientes)} de {len(transacciones)}.")
